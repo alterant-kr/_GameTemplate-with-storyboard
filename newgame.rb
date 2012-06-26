@@ -26,12 +26,12 @@ def generate_new_app(appname)
   # copy the files to the app code directory
   FileUtils.cp_r './.', code_dir
 
-  # copy README
-  FileUtils.cp_r 'README', app_dir
+  # copy README.md
+  FileUtils.cp_r 'README.md', app_dir
 
   # Remove support files used only for corona-game-template development
   FileUtils.rm_r "#{code_dir}/.git"
-  FileUtils.rm_r "#{code_dir}/README"
+  FileUtils.rm_r "#{code_dir}/README.md"
   FileUtils.rm "#{code_dir}/newgame.rb"
   FileUtils.rm_r "#{code_dir}/_GameTemplate_.esproj"
 end
