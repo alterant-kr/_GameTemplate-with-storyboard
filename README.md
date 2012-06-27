@@ -5,8 +5,8 @@ This is a template project for building games using Ansca Mobile's Corona SDK (h
 
 ORIGINAL TEMPLATE FROM Radamanthus Batnag
 Corona Game Template version 1.0
-(c) 2011 by Radamanthus Batnag
-(c) 2012 by Roman Neo with Alterant, Inc.
+- (c) 2011 by Radamanthus Batnag
+- (c) 2012 by Roman Neo with Alterant, Inc.
 
 This is a template project for building games using Ansca Mobile's Corona SDK (http://www.anscamobile.com/corona/)
 
