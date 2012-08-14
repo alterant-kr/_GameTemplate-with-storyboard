@@ -2,7 +2,7 @@
 
 -- Version 1.5 (works with multitouch, adds setText() method to buttons)
 --
--- Copyright (C) 2010 ANSCA Inc. All Rights Reserved.
+-- Copyright (C) 2010 Corona Labs Inc. All Rights Reserved.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of 
 -- this software and associated documentation files (the "Software"), to deal in the 
@@ -20,25 +20,6 @@
 -- FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
 -- OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 -- DEALINGS IN THE SOFTWARE.
-
-----------------------------------------------------
--- Edited by William Flagello, williamflagello.com
-----------------------------------------------------
--- Works with Dynamic Scaling.
-----------------------------------------------------
-
--- 
--- Abstract: Goshts Vs Monsters sample project 
--- Designed and created by Jonathan and Biffy Beebe of Beebe Games exclusively for Ansca, Inc.
--- http://beebegamesonline.appspot.com/
-
--- (This is easiest to play on iPad or other large devices, but should work on all iOS and Android devices)
--- 
--- Version: 1.0
--- 
--- Sample code is MIT licensed, see http://developer.anscamobile.com/code/license
--- Copyright (C) 2010 ANSCA Inc. All Rights Reserved.
-
 
 module(..., package.seeall)
 
@@ -125,21 +106,49 @@ end
 -- Button class
 
 function newButton( params )
-	local button, defaultSrc , defaultX , defaultY , overSrc , overX , overY , size, font, textColor, offset
+	local button, default, over, size, font, textColor, offset
 	
-	if params.defaultSrc then
+	if params.default then
 		button = display.newGroup()
-		default = display.newImageRect ( params.defaultSrc , params.defaultX , params.defaultY )
+		default = display.newImage( params.default )
 		button:insert( default, true )
 	end
 	
-	if params.overSrc then
-		over = display.newImageRect ( params.overSrc , params.overX , params.overY )
+	if params.over then
+		over = display.newImage( params.over )
 		over.isVisible = false
 		button:insert( over, true )
 	end
 	
 	-- Public methods
+	function button:setDefault( newImage )
+		local defaultImage = self.default
+		if ( defaultImage ) then
+			defaultImage:removeSelf()
+			self.default = nil
+		end
+		
+		if ( newImage ) then
+			defaultImage = display.newImage( newImage )
+			button:insert( defaultImage, true )
+			self.default = defaultImage
+		end
+	end
+	
+	function button:setOver( newImage )
+		local overImage = self.over
+		if ( overImage ) then
+			overImage:removeSelf()
+			self.over = nil
+		end
+		
+		if ( newImage ) then
+			overImage = display.newImage( newImage )
+			button:insert( overImage, true )
+			self.over = overImage
+		end
+	end
+	
 	function button:setText( newText )
 	
 		local labelText = self.text
@@ -163,8 +172,6 @@ function newButton( params )
 		if ( params.size and type(params.size) == "number" ) then size=params.size else size=20 end
 		if ( params.font ) then font=params.font else font=native.systemFontBold end
 		if ( params.textColor ) then textColor=params.textColor else textColor={ 255, 255, 255, 255 } end
-		
-		size = size * 2
 		
 		-- Optional vertical correction for fonts with unusual baselines (I'm looking at you, Zapfino)
 		if ( params.offset and type(params.offset) == "number" ) then offset=params.offset else offset = 0 end
@@ -192,9 +199,6 @@ function newButton( params )
 			button:insert( labelShadow, true )
 			labelShadow.x = labelShadow.x - 1; labelShadow.y = labelShadow.y - 1 + offset
 			self.shadow = labelShadow
-			
-			labelHighlight.xScale = .5; labelHighlight.yScale = .5
-			labelShadow.xScale = .5; labelShadow.yScale = .5
 		end
 		
 		labelText = display.newText( newText, 0, 0, font, size )
@@ -202,8 +206,6 @@ function newButton( params )
 		button:insert( labelText, true )
 		labelText.y = labelText.y + offset
 		self.text = labelText
-		
-		labelText.xScale = .5; labelText.yScale = .5
 	end
 	
 	if params.text then
@@ -220,10 +222,7 @@ function newButton( params )
 	if (params.onEvent and ( type(params.onEvent) == "function" ) ) then
 		button._onEvent = params.onEvent
 	end
-	
-	-- set button to active (meaning, can be pushed)
-	button.isActive = true
-	
+		
 	-- Set button as a table listener by setting a table method and adding the button as its own table listener for "touch" events
 	button.touch = newButtonHandler
 	button:addEventListener( "touch", button )
